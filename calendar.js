@@ -1,3 +1,8 @@
+/**
+ * Author: Anis Saha
+ * Date Created: 2024-05-22
+ */
+
 // get important elements
 const calendarUI = document.getElementById("cal");
 let prevMonth = document.getElementById("prev-month");

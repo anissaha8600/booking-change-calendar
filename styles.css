@@ -3,15 +3,25 @@
     font-family: tahoma;
 }
 
-body, .booking-view-container {
+
+body {
+    background-color: rgba(235, 235, 235, 0.393);
+}
+
+
+.booking-view-container {
+    margin-top: 100px;
     width: 100%;
     height: 100%;
-    background-color: darkgrey;
-    display: flex;
+    display: grid;
+    justify-content: center;
+    background-color: #0000;
+    background: unset;
 
     /* define size of container box shadow */
-    --main-box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.356);
+    --main-box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.356);
 }
+
 
 .calendar-popup {
     position: relative;
@@ -19,7 +29,7 @@ body, .booking-view-container {
     margin-top: 10px;
     padding-inline: 3px;
     display: grid;
-    width: 300px;
+    max-width: 300px;
     height: fit-content;
     grid-template-rows: 40px 20px;
     grid-template-columns: repeat(7 50px);
@@ -106,32 +116,54 @@ body, .booking-view-container {
 }
 
 .today p {
-    background-color: rgb(77, 77, 77);
+    background-color: rgb(93, 18, 18);
     color: aliceblue;
+}
+
+@keyframes slide-events {
+    from {
+        transform: translateY(-256px) scaleY(.2);
+    }
+
+    to {
+        transform: translateY(0) scaleY(1);
+    }
+    
 }
 
 /* Slider for selecting event */
 .calendar-slider {
-    background-color: #E4E4E4;
-    height: 231px;
+    background-color: #f1f1f1;
+    height: 230px;
     width: 300px;
-    margin-left: -40px;
+    margin-left: 0px;
     z-index: 0;
-    margin-top: 33px;
     border-radius:20px;
     box-shadow: var(--main-box-shadow);
-    align-items: stretch;
+    align-items: center;
     padding-bottom: 0px;
-    padding-top: 2px;
+    padding-top: 40px;
+    margin-top: -30px;
+    border: 4px inset rgba(71, 3, 3, 0.804);
+    border-width: 6px 2px;
+    animation-duration: 200ms;
+    animation-name: slide-events;
+    animation-timing-function:cubic-bezier(0.25, 0.46, 0.45, 0.94)
+}
+
+.retracted {
+    margin-top: -256px;
+    animation: none;
 }
 
 .event-space {
     background-color: #0000;
-    width: 220px;
-    margin-left: 50px;
+    width: fit-content;
     overflow-y: scroll;
+    width: fit-content;
     max-height: 190px;
-    margin-bottom: 5px;
+    margin-bottom: 0px;
+    margin-inline: auto;
 }
 
 --webkit-scroll-bar {
@@ -142,7 +174,7 @@ body, .booking-view-container {
     background-color: #dfdfdf;
     border: none;
     display: block;
-    width: 180px;
+    width: 250px;
     border-radius: 10px;
     padding-block: 0px;
     margin: 10px;
@@ -185,7 +217,7 @@ body, .booking-view-container {
 }
 
 .already-booked .slot-indicator {
-    background-color: rgb(0, 102, 255);
+    background-color: rgb(88, 146, 234);
 }
 
 .already-booked:hover {
@@ -200,6 +232,15 @@ body, .booking-view-container {
     background-color: #0000;
 }
 
+.event-content {
+    width: 100%;
+}
+
+.event-btn-top {
+    display: flex;
+    width: 100%;
+}
+
 .event-btn h5, .event-btn p {
     background-color: #0000;
 }
@@ -212,9 +253,22 @@ body, .booking-view-container {
     margin-top: -15px;
 }
 
+.already-booked:active {
+    background-color: rgba(164, 164, 246, 0.836);
+}
+
+.slider-bottom {
+    background-color: #0000;
+    text-align: center;
+}
+
+#selected-event-status {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    background-color: #0000;
+}
+
 .confirm-event-btn {
-    margin-top: 5px;
-    margin-left: 120px;
     border: none;
     border-radius: 5px;
     height: 30px;
@@ -232,5 +286,5 @@ body, .booking-view-container {
 }
 
 .confirm-event-btn:hover { 
-    background-color: rgb(255, 37, 37);
+    background-color: rgb(243, 28, 28);
 }

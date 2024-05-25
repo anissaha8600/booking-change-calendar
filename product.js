@@ -1,3 +1,20 @@
+const PRODUCT_ID_MAP = {
+    "workshop": 8246,
+    "workshop_trial": 1629,
+    "camp_4day": 2063,
+    "camp_5day": 924,
+    "camp_1day": 2749
+  };
+
+const ID_PRODUCT_MAP = {
+    8246 : {
+        title : "Workshop"
+    },
+    1629 : {
+        title : "Workshop Trial"
+    }
+}
+
 function getTimeSlots(productId) {
 
     // will replace this with a backend call when we get there
@@ -267,41 +284,43 @@ function getTimeSlots(productId) {
     booked: 0,
     product_id: 8246 } ];
 
-    return records.filter(r => r.product_id === productId);
+    
+
+    recordToHTML = records
+    .filter(r => r.product_id === productId)
+    .forEach(r => {
+        let date = new Date(r.date);
+        const mo = date.getMonth();
+        const yr = date.getFullYear();
+        const dt = date.getDate();
+    
+        robj = {
+            date : date,
+            html : `
+            <h5 class="cal-event-header">${ID_PRODUCT_MAP[productId].title}</h5>
+            <p class="cal-event-text">
+            `
+        }
+    
+        const monthsFromNow = (yr*12+mo) - now.getMonth;
+        if (!dateEventMap[monthsFromNow]) {
+            dateEventMap[monthsFromNow] = {
+                dt : [r]
+            }
+        } 
+        else if (!dateEventMap[monthsFromNow][dt]) {
+            dateEventMap[monthsFromNow][dt] = [r];
+        }
+        else {
+            dateEventMap[monthsFromNow][dt].push(r);
+        }
+    });;
 }
 
-const PRODUCT_ID_MAP = {
-    "workshop": 8246,
-    "workshop_trial": 1629,
-    "camp_4day": 2063,
-    "camp_5day": 924,
-    "camp_1day": 2749
-  };
-
-const product = "workshop_trial";
-
+// convert records into date -> html map
+// for display next to calendar component
 const now = new Date();
-
-
 dateEventMap = {};
-records.forEach(r => {
-    let date = new Date(r.date);
-    const mo = date.getMonth();
-    const yr = date.getFullYear();
-    const dt = date.getDate();
 
-    const monthsFromNow = (yr*12+mo) - now.getMonth;
-    if (!dateEventMap[monthsFromNow]) {
-        dateEventMap[monthsFromNow] = {
-            dt : [r]
-        }
-    } 
-    else if (!dateEventMap[monthsFromNow][dt]) {
-        dateEventMap[monthsFromNow][dt] = [r];
-    }
-    else {
-        dateEventMap[monthsFromNow][dt].push(r);
-    }
-});
 
 console.log(dateEventMap);

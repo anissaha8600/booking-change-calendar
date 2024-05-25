@@ -5,7 +5,7 @@
 
 
 body {
-    background-color: rgba(235, 235, 235, 0.393);
+    background-color: rgba(87, 87, 87);
 }
 
 
@@ -30,6 +30,7 @@ body {
     padding-inline: 3px;
     display: grid;
     max-width: 300px;
+    width: 300px;
     height: fit-content;
     grid-template-rows: 40px 20px;
     grid-template-columns: repeat(7 50px);
@@ -39,9 +40,9 @@ body {
     justify-content: center;
     border-radius: 20px;
 
-    
+    border-bottom: none;
 
-    box-shadow: var(--main-box-shadow);
+    box-shadow:  var(--main-box-shadow); 
     padding: 10px;
 }
 
@@ -133,22 +134,20 @@ body {
 
 /* Slider for selecting event */
 .calendar-slider {
-    background-color: #f1f1f1;
     height: 230px;
-    width: 300px;
-    margin-left: 0px;
+    width: 290px;
     z-index: 0;
+    margin-inline: auto;
     border-radius:20px;
-    box-shadow: var(--main-box-shadow);
     align-items: center;
     padding-bottom: 0px;
-    padding-top: 40px;
-    margin-top: -30px;
-    border: 4px inset rgba(71, 3, 3, 0.804);
-    border-width: 6px 2px;
+    padding-top: 50px;
+    margin-top: -50px;
     animation-duration: 200ms;
     animation-name: slide-events;
-    animation-timing-function:cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    background-color: #EFEFEF;
+    box-shadow: var(--main-box-shadow);
+    animation-timing-function:cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .retracted {
@@ -164,10 +163,6 @@ body {
     max-height: 190px;
     margin-bottom: 0px;
     margin-inline: auto;
-}
-
---webkit-scroll-bar {
-    border-radius: 10px;
 }
 
 .event-btn {
@@ -287,4 +282,9 @@ body {
 
 .confirm-event-btn:hover { 
     background-color: rgb(243, 28, 28);
+}
+
+hr {
+    width: 70%;
+    z-index: 1;
 }

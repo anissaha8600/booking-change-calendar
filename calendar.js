@@ -2,14 +2,21 @@
  * Author: Anis Saha
  * Date Created: 2024-05-22
  */
+import { getDateEventMap, PRODUCT_ID_MAP } from "./product.js"
 
-// get important elements
-const calendarUI = document.getElementById("cal");
-let prevMonth = document.getElementById("prev-month");
-let nextMonth = document.getElementById("next-month");
-let monthHeader = document.getElementById("month-title");
+// get date-event map from the backend
+const dateEventMap = getDateEventMap(PRODUCT_ID_MAP.workshop);
+console.log(dateEventMap);
 
-// set class names
+// get important interactive html elements
+const calendarUI = document.getElementById("cal"); // main calendar div
+const calSlider = document.getElementById("cal-slider"); // slider component of calnedar
+const eventSpace = document.getElementById("event-space");  // section of calendar slider to showcase events for the day
+let prevMonth = document.getElementById("prev-month"); // prev month button
+let nextMonth = document.getElementById("next-month");  // next month button
+let monthHeader = document.getElementById("month-title");   // header on calendar specifying month
+
+// specify class names for calendar elements
 const CAL_ENTRY_CLS = "cal-block";
 
 console.log(prevMonth, nextMonth);
@@ -30,6 +37,47 @@ const calendarHeaderContent = calendarUI.innerHTML;
 renderMonth(0);
 
 /**
+ * Callback function for dates with events on calendar to open event display slider when clicked
+ * 
+ * @param {int} monthsFromNow - number of months from current date
+ * @param {int} dayOfMonth - day of month (to index date-event map)
+ */
+function openEventSliderCallback(monthsFromNow, dayOfMonth) {
+
+    // add events to slider then push it down so user can see
+    console.log(dateEventMap[monthsFromNow][dayOfMonth].join('\n'));
+    eventSpace.innerHTML = dateEventMap[monthsFromNow][dayOfMonth]
+        .map(d => d.html).join("\n");
+
+    // add callbacks to newly added buttons 
+    eventSpace.childNodes.forEach(btn => {
+        btn.addEventListener("click", () => {setActiveEvent(btn);});
+    });
+
+
+    calSlider.classList.remove("retracted");
+
+}
+
+var activeEvent = null; // singleton for which element is currently active
+/**
+ * Set event element to active in calendar slider ui
+ * 
+ * @param {HTMLElement} element 
+ */
+function setActiveEvent(element) {
+
+    // remove active status from prev selected element
+    if (activeEvent !== null) {
+        activeEvent.classList.remove(":active");
+    }
+
+    // add active status to new class
+    activeEvent = element;
+    element.classList.add(":active");
+}
+
+/**
  * Display calendar for month specified by month delta relative to current date
  * 
  * @param {int} monthsFromNow - number of months from current date to display on calendar
@@ -39,7 +87,7 @@ function renderMonth(monthsFromNow) {
     let curr = new Date();
     curr.setMonth(curr.getMonth()+monthsFromNow);
 
-    /* The above approach wasn't working so I'm just going to use HTML strings */
+    /* Reset inner HTML with new content whenever month is changed */
     calendarUI.innerHTML = calendarHeaderContent;
     console.log(calendarHeaderContent);
 
@@ -67,7 +115,7 @@ function renderMonth(monthsFromNow) {
     let lastDate = null; // last day of month
 
     // get first day of month and last
-    curr.setDate(1);
+    curr.setDate(1); 
     dayOfWeekStartEnd[0] = curr.getDay();
     let past = new Date(curr);
     past.setDate(past.getDate()-dayOfWeekStartEnd[0]);
@@ -88,7 +136,7 @@ function renderMonth(monthsFromNow) {
     lastDate = curr.getDate();
 
     // fill in month dates
-    for (i=1; i<=lastDate; i++) {
+    for (let i=1; i<=lastDate; i++) {
         dateEntries.push({
             date : i,
             spill : false
@@ -96,7 +144,7 @@ function renderMonth(monthsFromNow) {
     }
 
     // fill in edge dates that spillover into next month
-    for (i=dayOfWeekStartEnd[1]; i<6; i++) {
+    for (let i=dayOfWeekStartEnd[1]; i<6; i++) {
         dateEntries.push({
             date : i-dayOfWeekStartEnd[1]+1,
             spill : true
@@ -106,18 +154,33 @@ function renderMonth(monthsFromNow) {
     console.log()
     
     // change month on calendar
-    now = new Date(); // reset curr date
+    let now = new Date(); // reset curr date
     monthHeader.innerHTML = curr.toLocaleString('default', {month: 'long', year: 'numeric'});
 
     // display onto calendar
     dateEntries.forEach(entry => {
-        div = document.createElement('button')
+        let div = document.createElement('button')
         div.classList.add(CAL_ENTRY_CLS);
         div.classList.add(curr.toLocaleDateString('default', {month: 'long'}));
         if (entry.spill) div.classList.add('spill');
         else if (monthsFromNow==0 && entry.date === now.getDate()) {
             div.classList.add('today');
         }
+
+        // add event-day class to node if day contains events
+        if (!entry.spill && dateEventMap?.[monthsFromNow]?.[entry.date]?.length >= 1) 
+        {
+            // fade out in css if in past date
+            if (monthsFromNow < 0 || monthsFromNow === 0 && entry.date < now.getDate()) {
+                div.classList.add("event-date-passed");
+            }
+            else {
+                div.classList.add("event-date");
+            }
+
+            div.addEventListener("click", () => {openEventSliderCallback(monthsFromNow, entry.date);});
+        }
+
         div.innerHTML = `<p class="cal-date">${entry.date}</p>`;
         calendarUI.appendChild(div);
     });

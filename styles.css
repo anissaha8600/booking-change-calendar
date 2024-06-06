@@ -116,8 +116,16 @@ body {
     background-color: #0000;
 }
 
+.event-date-passed p {
+    background-color: #c4f9b194;
+}
+
+.event-date p {
+    background-color: #91fb6a;
+}
+
 .today p {
-    background-color: rgb(93, 18, 18);
+    background-color: rgb(64, 64, 64);
     color: aliceblue;
 }
 
@@ -200,6 +208,7 @@ body {
     border-radius: 100%;
     width: 9px;
     height: 9px;
+    max-height: 9px;
     background-color: #53D560;
     margin-left: 5px;
     margin-right: 10px;

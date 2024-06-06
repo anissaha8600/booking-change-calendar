@@ -1,4 +1,4 @@
-const PRODUCT_ID_MAP = {
+export const PRODUCT_ID_MAP = {
     "workshop": 8246,
     "workshop_trial": 1629,
     "camp_4day": 2063,
@@ -15,7 +15,32 @@ const ID_PRODUCT_MAP = {
     }
 }
 
-function getTimeSlots(productId) {
+/** Given a date, return a string representing date w format 'YYYY-mm-ddTHH:I 
+ * @param {Date} date - date to be converted
+ * @return {string} - converted date in format specified above
+*/
+function dateToString(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
+}
+
+
+/** Given a productID and UserID, return a map from every date with a booking
+ * slot of the specified product, mapping to the html components of the buttons 
+ * to show in the calendar ui
+ * 
+ * @param {int} productId - id of product as in site database
+ * @param {int} userId - id of current user as in site database
+ * 
+ * @return {Map<string, Array<string>>} - mapping date string to array of html elements 
+ *                                        of time slot options for user and product
+ */
+export function getDateEventMap(productId, userId=0) {
 
     // will replace this with a backend call when we get there
     const records = [ { date: '2024-05-25T13:30',
@@ -284,43 +309,54 @@ function getTimeSlots(productId) {
     booked: 0,
     product_id: 8246 } ];
 
-    
+    // convert records into date -> html map
+    // for display next to calendar component
+    const now = new Date();
+    let dateEventMap = {};
 
-    recordToHTML = records
+    
+    // get html components for each time slot
+    records
     .filter(r => r.product_id === productId)
     .forEach(r => {
         let date = new Date(r.date);
         const mo = date.getMonth();
-        const yr = date.getFullYear();
+        const yrs_away = date.getFullYear()-now.getFullYear();
         const dt = date.getDate();
+
+        const totalSlots = r.available + r.booked;
     
-        robj = {
+        const robj = {
             date : date,
             html : `
-            <h5 class="cal-event-header">${ID_PRODUCT_MAP[productId].title}</h5>
-            <p class="cal-event-text">
+            <button class="event-btn ${r.available>0 ? "available" : ""}" ${r.available===0 ? "disabled" : ""}>
+                    <span class="slot-indicator"></span>
+                    <span class="event-content">
+                        <h5>${ID_PRODUCT_MAP[r.product_id].title} (${r.available}/${totalSlots} Available)</h5>
+                        <p>${date.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true})}</p>
+                    </span>
+                </button>
             `
         }
     
-        const monthsFromNow = (yr*12+mo) - now.getMonth;
+        const monthsFromNow = ((yrs_away*12)+mo) - now.getMonth();
         if (!dateEventMap[monthsFromNow]) {
             dateEventMap[monthsFromNow] = {
-                dt : [r]
+                dt : [robj]
             }
         } 
         else if (!dateEventMap[monthsFromNow][dt]) {
-            dateEventMap[monthsFromNow][dt] = [r];
+            dateEventMap[monthsFromNow][dt] = [robj];
         }
         else {
-            dateEventMap[monthsFromNow][dt].push(r);
+            dateEventMap[monthsFromNow][dt].push(robj);
         }
-    });;
+
+    });
+
+    console.log("date event map:",dateEventMap);
+    return dateEventMap;
 }
 
-// convert records into date -> html map
-// for display next to calendar component
-const now = new Date();
-dateEventMap = {};
 
 
-console.log(dateEventMap);

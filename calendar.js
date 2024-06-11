@@ -8,13 +8,31 @@ import { getDateEventMap, PRODUCT_ID_MAP } from "./product.js"
 const dateEventMap = getDateEventMap(PRODUCT_ID_MAP.workshop);
 console.log(dateEventMap);
 
+// helper constants for date display
+const daysOfWeek = [
+    'Sunday', 'Monday', 'Tuesday',
+    'Wednesday', 'Thursday', 'Friday',
+    'Saturday'
+];
+const monthsThree = [
+    'Jan', 'Feb', 'Mar',
+    'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep',
+    'Oct', 'Nov', 'Dec'
+];
+
 // get important interactive html elements
 const calendarUI = document.getElementById("cal"); // main calendar div
-const calSlider = document.getElementById("cal-slider"); // slider component of calnedar
-const eventSpace = document.getElementById("event-space");  // section of calendar slider to showcase events for the day
 let prevMonth = document.getElementById("prev-month"); // prev month button
 let nextMonth = document.getElementById("next-month");  // next month button
-let monthHeader = document.getElementById("month-title");   // header on calendar specifying month
+let monthHeader = document.getElementById("month-title"); 
+
+// calendar slider components
+const calSlider = document.getElementById("cal-slider"); // slider component of calnedar
+const sliderDate = document.getElementById("showing-events-date")
+const eventSpace = document.getElementById("event-space");  // section of calendar slider to showcase events for the day
+const confirmBtn = document.getElementById("slider-confirm-btn"); // confirm event button on calendar slider  // header on calendar specifying month
+
 
 // specify class names for calendar elements
 const CAL_ENTRY_CLS = "cal-block";
@@ -48,13 +66,29 @@ function openEventSliderCallback(monthsFromNow, dayOfMonth) {
     console.log(dateEventMap[monthsFromNow][dayOfMonth].join('\n'));
     eventSpace.innerHTML = dateEventMap[monthsFromNow][dayOfMonth]
         .map(d => d.html).join("\n");
+    
+    // change header to reflect selected date
+    let date = new Date();
+    date.setMonth(date.getMonth()+monthsFromNow);
+    date.setDate(dayOfMonth);
+    sliderDate.innerHTML = `${daysOfWeek[date.getDay()]}, ${monthsThree[date.getMonth()]} ${dayOfMonth}`;
+
+    // reset animation
+    calSlider.style.animation = 'none';
+    calSlider.offsetHeight;
+    calSlider.style.animation = null;
+
+    // disable confirm button and unset active element if set
+    unsetActiveElement();
+    
 
     // add callbacks to newly added buttons 
     eventSpace.childNodes.forEach(btn => {
         btn.addEventListener("click", () => {setActiveEvent(btn);});
     });
 
-
+    setTimeout(() => {calSlider.classList.remove("retracted")},
+                10000);
     calSlider.classList.remove("retracted");
 
 }
@@ -69,12 +103,25 @@ function setActiveEvent(element) {
 
     // remove active status from prev selected element
     if (activeEvent !== null) {
-        activeEvent.classList.remove(":active");
+        activeEvent.active = false;
     }
 
     // add active status to new class
     activeEvent = element;
-    element.classList.add(":active");
+    element.classList.add("pressed");
+
+    // enable submit button
+    confirmBtn.disabled = false;
+}
+
+function unsetActiveElement() {
+    if (activeEvent !== null) {
+        activeEvent.active = false;
+    }
+
+    // disable submit button
+    activeEvent = null;
+    confirmBtn.disabled = true;
 }
 
 /**
@@ -167,17 +214,17 @@ function renderMonth(monthsFromNow) {
             div.classList.add('today');
         }
 
-        // add event-day class to node if day contains events
-        if (!entry.spill && dateEventMap?.[monthsFromNow]?.[entry.date]?.length >= 1) 
-        {
-            // fade out in css if in past date
-            if (monthsFromNow < 0 || monthsFromNow === 0 && entry.date < now.getDate()) {
-                div.classList.add("event-date-passed");
-            }
-            else {
-                div.classList.add("event-date");
-            }
+        // fade out in css if in past date
+        let pastDate = false;
+        if (monthsFromNow < 0 || monthsFromNow === 0 && entry.date < now.getDate()) {
+            div.classList.add("spill");
+            pastDate = true;
+        }
 
+        // add event-day class to node if day contains events
+        if (!pastDate && !entry.spill && dateEventMap?.[monthsFromNow]?.[entry.date]?.length >= 1) 
+        {
+            div.classList.add("event-date");
             div.addEventListener("click", () => {openEventSliderCallback(monthsFromNow, entry.date);});
         }
 

@@ -122,17 +122,31 @@ body {
 }
 
 .event-date p {
-    background-color: #91fb6a;
+    background-color: #4fe119;
+    box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.217);
     color: rgb(0, 53, 0)
 }
 
+.event-date-full p {
+    background-color: #d7d7d7;
+    color: #a1a1a1;
+}
+
+.event-date.booked p {
+    color: rgba(0, 0, 163, 0.429);
+    background-color: rgba(151, 151, 251, 0.5);
+}
+
 .event-date:hover * {
-    background-color: #6ce341;
+    background-color: #5fd733;
+    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.217);;
 }
 
 .today p {
     background-color: rgb(64, 64, 64);
     color: aliceblue;
+    box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.217);
+
 }
 
 @keyframes slide-events {
@@ -155,7 +169,6 @@ body {
     padding-left: 20px;
     height: fit-content;
     min-height: 180px;
-    max-height: 230px;
     width: 290px;
     z-index: 0;
     margin-inline: auto;
@@ -173,7 +186,7 @@ body {
 
 /* animation for slider */
 .retracted {
-    margin-top: -256px;
+    margin-top: -254px;
     animation: none;
     height: fit-content;
 }
@@ -183,7 +196,8 @@ body {
     width: fit-content;
     overflow-y: scroll;
     width: fit-content;
-    max-height: 190px;
+    max-height: 150px;
+    max-width: 245px;
     margin-bottom: 0px;
     margin-inline: auto;
 }
@@ -198,13 +212,15 @@ body {
 .divider {
     border-top: 2px solid rgba(91, 91, 91, 0.199);
     margin-top: 2px;
+    margin-bottom: 5px;
     width: 230px;
     margin-inline: auto;
     margin-left: 10px;
+
 }
 
 #event-space-header h6 {
-    font-family: Arial;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 12px;
     padding: 0px;
     margin: 0px;
@@ -235,6 +251,7 @@ body {
     border: none;
     display: block;
     width: 230px;
+    max-width: 200px;
     border-radius: 10px;
     padding-block: 0px;
     margin: 10px;
@@ -243,13 +260,18 @@ body {
     box-sizing: border-box;
 }
 
+em {
+    background-color: #0000;
+    color:rgba(0, 0, 0, 0.868)
+}
+
 .event-btn:hover {
     
     background-color: #d2d2d2;
 }
 
 .event-btn.pressed {
-    background-color: #b9b6d297;
+    
     border: 1px solid rgba(0, 0, 0, 0.242);
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.167);
     margin-bottom: 8px; /* offset change in apparent size from added border */
@@ -260,8 +282,17 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.105);
 }
 
+.event-btn:disabled:active {
+    background-color: #0000;
+    box-shadow: none;
+}
+
 .event-btn:disabled .slot-indicator {
     background-color: #bfbfbf;
+}
+
+.event-btn:disabled .event-content * {
+    color: rgba(0, 0, 0, 0.527)
 }
 
 .event-btn:active {
@@ -271,9 +302,12 @@ body {
 
 .slot-indicator {
     border-radius: 100%;
+    min-width: 9px;
+    min-height: 10px;
     width: 9px;
-    height: 9px;
+    height: 10px;
     max-height: 9px;
+    min-height: 9.5px;
     background-color: #53D560;
     margin-left: 5px;
     margin-right: 10px;
@@ -283,6 +317,13 @@ body {
 .already-booked {
     color: rgba(0, 0, 163, 0.429);
     background-color: rgba(112, 112, 255, 0.153);
+}
+
+.already-booked .event-content p  {
+    color: rgba(0, 0, 77, 0.39);
+}
+.already-booked .event-content em {
+    color: rgba(0, 0, 77, 0.505);
 }
 
 .already-booked .slot-indicator {

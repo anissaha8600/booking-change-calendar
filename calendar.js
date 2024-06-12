@@ -34,6 +34,11 @@ const eventSpace = document.getElementById("event-space");  // section of calend
 const confirmBtn = document.getElementById("slider-confirm-btn"); // confirm event button on calendar slider  // header on calendar specifying month
 
 
+// confirm button onclick
+confirmBtn.addEventListener('click', ()=>{
+    alert("Booking Changed Successfully.");
+})
+
 // specify class names for calendar elements
 const CAL_ENTRY_CLS = "cal-block";
 
@@ -80,6 +85,9 @@ function openEventSliderCallback(monthsFromNow, dayOfMonth) {
 
     // disable confirm button and unset active element if set
     unsetActiveElement();
+
+    // scroll to top
+    eventSpace.scrollTo(0, 0);
     
 
     // add callbacks to newly added buttons 
@@ -103,7 +111,7 @@ function setActiveEvent(element) {
 
     // remove active status from prev selected element
     if (activeEvent !== null) {
-        activeEvent.active = false;
+        activeEvent.classList.remove("pressed");
     }
 
     // add active status to new class
@@ -224,7 +232,20 @@ function renderMonth(monthsFromNow) {
         // add event-day class to node if day contains events
         if (!pastDate && !entry.spill && dateEventMap?.[monthsFromNow]?.[entry.date]?.length >= 1) 
         {
-            div.classList.add("event-date");
+            // already booked by current user
+            if (dateEventMap[monthsFromNow][entry.date].some(e=>e.state=='booked')) {
+                div.classList.add("event-date");
+                div.classList.add("booked");
+            }
+            // available
+            else if (dateEventMap[monthsFromNow][entry.date].some(e=>e.state=='available')) {
+                div.classList.add("event-date");
+            }
+            // full
+            else {
+                div.classList.add("event-date-full");
+            }
+            
             div.addEventListener("click", () => {openEventSliderCallback(monthsFromNow, entry.date);});
         }
 

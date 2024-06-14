@@ -729,7 +729,7 @@ export function getDateEventMap(productId, userId=0) {
     
     // get html components for each time slot
     records
-    .filter(r => true) //r.product_id === productId)
+    .filter(r => r.product_id === productId)
     .forEach(r => {
         let date = new Date(r.date);
         const mo = date.getMonth();

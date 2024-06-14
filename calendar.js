@@ -23,6 +23,7 @@ const monthsThree = [
 
 // get important interactive html elements
 const calendarUI = document.getElementById("cal"); // main calendar div
+let todayBtn = document.getElementById("today-btn");
 let prevMonth = document.getElementById("prev-month"); // prev month button
 let nextMonth = document.getElementById("next-month");  // next month button
 let monthHeader = document.getElementById("month-title"); 
@@ -150,6 +151,11 @@ function renderMonth(monthsFromNow) {
     prevMonth = document.getElementById("prev-month");
     nextMonth = document.getElementById("next-month");
     monthHeader = document.getElementById("month-title");
+    todayBtn = document.getElementById("today-btn");
+    
+
+    /* disable today btn if month rendered is present */
+    todayBtn.disabled = monthsFromNow === 0;
 
     /* listeners got lost so re-adding them too */
     prevMonth.addEventListener('click', () => {
@@ -160,6 +166,10 @@ function renderMonth(monthsFromNow) {
         monthsFromNow += 1;
         renderMonth(monthsFromNow);
     })
+    todayBtn.addEventListener('click', () => {
+        monthsFromNow = 0;
+        renderMonth(monthsFromNow);
+    });
 
 
     const dateEntries = [];  // entries on month view of calendar (including spill over from adjacent months)

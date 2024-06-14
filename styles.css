@@ -74,10 +74,17 @@ body {
 
 .month-title {
     padding-inline: 5px;
-    font-weight: 300;
+    padding-top: 2px;
     letter-spacing: 1px;
     color: rgb(0, 0, 0);
+    font-size: 16px;
     font-family: Arial, Helvetica, sans-serif;
+    font-weight: 400;
+}
+
+#today-btn {
+    font-weight: 400;
+    margin-right: -5px;
 }
 
 .day-of-week {
@@ -122,8 +129,7 @@ body {
 }
 
 .event-date p {
-    background-color: #4fe119;
-    box-shadow: 0px 0px 1px 1px rgba(0, 0, 0, 0.217);
+    background-color: #b7ff9d;
     color: rgb(0, 53, 0)
 }
 
@@ -138,8 +144,7 @@ body {
 }
 
 .event-date:hover * {
-    background-color: #5fd733;
-    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.217);;
+    background-color: #a0dd8a;
 }
 
 .today p {
@@ -200,6 +205,7 @@ body {
     max-width: 245px;
     margin-bottom: 0px;
     margin-inline: auto;
+    margin-left: 10px;
 }
 
 /* header information confirming date selected for user */
@@ -255,14 +261,18 @@ body {
     border-radius: 10px;
     padding-block: 0px;
     margin: 10px;
+    margin-left: 0px;
     display: flex;
     align-items: center;
     box-sizing: border-box;
+    border: 1px solid #0000;
 }
 
 em {
     background-color: #0000;
-    color:rgba(0, 0, 0, 0.868)
+    color:rgba(0, 0, 0, 0.868);
+    font-size: 12px;
+    line-height: 0px;
 }
 
 .event-btn:hover {
@@ -274,7 +284,6 @@ em {
     
     border: 1px solid rgba(0, 0, 0, 0.242);
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.167);
-    margin-bottom: 8px; /* offset change in apparent size from added border */
 }
 
 .event-btn:disabled {
@@ -396,7 +405,7 @@ em {
     margin-top: 10px;
     margin-bottom: 10px;
     border: none;
-    margin-right: 20px; /* offset padding of slider */
+    margin-right: 10px; /* offset padding of slider */
     border-radius: 5px;
     height: 30px;
     box-shadow: 2px 2px 5px 0px rgba(0, 0, 0, 0.032); 
